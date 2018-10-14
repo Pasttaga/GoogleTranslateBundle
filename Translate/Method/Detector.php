@@ -1,25 +1,15 @@
 <?php
-/*
- * This file is part of the Eko\GoogleTranslateBundle Symfony bundle.
- *
- * (c) Vincent Composieux <vincent.composieux@gmail.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
 
-namespace Eko\GoogleTranslateBundle\Translate\Method;
+namespace Pasttaga\GoogleTranslateBundle\Translate\Method;
 
-use Eko\GoogleTranslateBundle\Exception\UnableToDetectException;
-use Eko\GoogleTranslateBundle\Translate\Method;
-use Eko\GoogleTranslateBundle\Translate\MethodInterface;
+use Pasttaga\GoogleTranslateBundle\Exception\UnableToDetectException;
+use Pasttaga\GoogleTranslateBundle\Translate\Method;
+use Pasttaga\GoogleTranslateBundle\Translate\MethodInterface;
 
 /**
  * Class Translator.
  *
  * This is the class to detect language used for a given text
- *
- * @author Vincent Composieux <vincent.composieux@gmail.com>
  */
 class Detector extends Method implements MethodInterface
 {
@@ -38,13 +28,13 @@ class Detector extends Method implements MethodInterface
      *
      * @param string $query A text to detect language
      *
-     * @return string
+     * @return string|null
      */
     public function detect($query)
     {
         $options = [
             'key' => $this->apiKey,
-            'q'   => $query,
+            'q' => $query,
         ];
 
         return $this->process($options);
@@ -67,7 +57,7 @@ class Detector extends Method implements MethodInterface
 
         $event = $this->startProfiling($this->getName(), $client->getConfig('query'));
 
-        $response = $client->get($this->url, ['query' => $options]);
+        $response = $client->request('GET', $this->url, ['query' => $options]);
         $json = json_decode($response->getBody()->getContents(), true);
 
         if (isset($json['data']['detections'])) {
@@ -79,7 +69,7 @@ class Detector extends Method implements MethodInterface
             }
         }
 
-        $this->stopProfiling($event, $this->getName(), $result);
+        $this->stopProfiling($event);
 
         return $result;
     }

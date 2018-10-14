@@ -1,24 +1,14 @@
 <?php
-/*
- * This file is part of the Eko\GoogleTranslateBundle Symfony bundle.
- *
- * (c) Vincent Composieux <vincent.composieux@gmail.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
 
-namespace Eko\GoogleTranslateBundle\Translate\Method;
+namespace Pasttaga\GoogleTranslateBundle\Translate\Method;
 
-use Eko\GoogleTranslateBundle\Translate\Method;
-use Eko\GoogleTranslateBundle\Translate\MethodInterface;
+use Pasttaga\GoogleTranslateBundle\Translate\Method;
+use Pasttaga\GoogleTranslateBundle\Translate\MethodInterface;
 
 /**
  * Class Languages.
  *
  * This is the class to list all language availables
- *
- * @author Vincent Composieux <vincent.composieux@gmail.com>
  */
 class Languages extends Method implements MethodInterface
 {
@@ -33,7 +23,7 @@ class Languages extends Method implements MethodInterface
      *
      * @param string $target A target language to translate languages names
      *
-     * @return string
+     * @return array
      */
     public function get($target = null)
     {
@@ -59,12 +49,12 @@ class Languages extends Method implements MethodInterface
     {
         $event = $this->startProfiling($this->getName(), 'get');
 
-        $response = $this->getClient()->get($this->url, ['query' => $options]);
+        $response = $this->getClient()->request('GET', $this->url, ['query' => $options]);
         $json = json_decode($response->getBody()->getContents(), true);
 
-        $result = isset($json['data']['languages']) ? $json['data']['languages'] : [];
+        $result = $json['data']['languages'] ?? [];
 
-        $this->stopProfiling($event, $this->getName(), $result);
+        $this->stopProfiling($event);
 
         return $result;
     }

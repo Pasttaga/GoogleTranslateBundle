@@ -1,13 +1,11 @@
 <?php
 
-namespace Eko\GoogleTranslateBundle\Tests\Method;
+namespace Pasttaga\GoogleTranslateBundle\Tests\Method;
 
-use Eko\GoogleTranslateBundle\Translate\Method\Languages;
+use Pasttaga\GoogleTranslateBundle\Translate\Method\Languages;
 
 /**
  * Languages class test.
- *
- * @author Vincent Composieux <vincent.composieux@gmail.com>
  */
 class LanguagesTest extends \PHPUnit_Framework_TestCase
 {
@@ -27,7 +25,7 @@ class LanguagesTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->languages = $this->getMock(
-            'Eko\GoogleTranslateBundle\Translate\Method\Languages',
+            'Pasttaga\GoogleTranslateBundle\Translate\Method\Languages',
             null,
             ['fakeapikey', $this->getClientMock()]
         );

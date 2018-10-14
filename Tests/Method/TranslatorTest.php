@@ -1,13 +1,11 @@
 <?php
 
-namespace Eko\GoogleTranslateBundle\Tests\Method;
+namespace Pasttaga\GoogleTranslateBundle\Tests\Method;
 
-use Eko\GoogleTranslateBundle\Translate\Method\Translator;
+use Pasttaga\GoogleTranslateBundle\Translate\Method\Translator;
 
 /**
  * Translator class test.
- *
- * @author Vincent Composieux <vincent.composieux@gmail.com>
  */
 class TranslatorTest extends \PHPUnit_Framework_TestCase
 {
@@ -27,7 +25,7 @@ class TranslatorTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->translator = $this->getMock(
-            'Eko\GoogleTranslateBundle\Translate\Method\Translator',
+            'Pasttaga\GoogleTranslateBundle\Translate\Method\Translator',
             null,
             ['fakeapikey', $this->getClientMock(), $this->getDetectorMock()]
         );
@@ -155,11 +153,11 @@ class TranslatorTest extends \PHPUnit_Framework_TestCase
     /**
      * Returns detector service mock.
      *
-     * @return \Eko\GoogleTranslateBundle\Translate\Method\Detector
+     * @return \Pasttaga\GoogleTranslateBundle\Translate\Method\Detector
      */
     public function getDetectorMock()
     {
-        return $this->getMockBuilder('Eko\GoogleTranslateBundle\Translate\Method\Detector')
+        return $this->getMockBuilder('Pasttaga\GoogleTranslateBundle\Translate\Method\Detector')
             ->disableOriginalConstructor()
             ->getMock();
     }

@@ -1,12 +1,6 @@
 GoogleTranslateBundle
 =====================
 
-[![SensioLabsInsight](https://insight.sensiolabs.com/projects/41d3d242-a0fe-424c-8cb1-65327f89df11/big.png)](https://insight.sensiolabs.com/projects/41d3d242-a0fe-424c-8cb1-65327f89df11)
-
-[![Build Status](https://secure.travis-ci.org/eko/GoogleTranslateBundle.png?branch=master)](http://travis-ci.org/eko/GoogleTranslateBundle)
-[![Latest Stable Version](https://poser.pugx.org/eko/GoogleTranslateBundle/version.png)](https://packagist.org/packages/eko/GoogleTranslateBundle)
-[![Total Downloads](https://poser.pugx.org/eko/GoogleTranslateBundle/d/total.png)](https://packagist.org/packages/eko/GoogleTranslateBundle)
-
 Features
 --------
 
@@ -24,7 +18,7 @@ Add the bundle to your `composer.json` file:
 ```json
 {
     "require" :  {
-        "eko/googletranslatebundle": "dev-master"
+        "pasttaga/googletranslatebundle": "dev-master"
     }
 }
 ```
@@ -35,10 +29,10 @@ Add this to app/AppKernel.php
 <?php
     public function registerBundles()
     {
-        $bundles = array(
+        return [
             ...
-            new Eko\GoogleTranslateBundle\EkoGoogleTranslateBundle(),
-        );
+            Pasttaga\GoogleTranslateBundle\PasttagaGoogleTranslateBundle::class => ['all' => true],
+        ];
 
         ...
 
@@ -54,7 +48,7 @@ Configuration
 The following configuration lines are required:
 
 ```yaml
-eko_google_translate:
+pasttaga_google_translate:
     api_key: <your key api string>
 ```
 
@@ -66,9 +60,11 @@ Usages
 Retrieve the detector service and call the `detect()` method:
 
 ```php
-$detector = $this->get('eko.google_translate.detector');
-$value = $detector->detect('Hi, this is my string to detect!');
-// This will return 'en'
+// Use Autowiring
+public function myFunction(Detector $detector)
+{
+    $value = $detector->detect('Hi, this is my string to detect!');
+    // This will return 'en'
 ```
 
 ### Translate a string
@@ -76,9 +72,11 @@ $value = $detector->detect('Hi, this is my string to detect!');
 Retrieve the translator service and call the `translate()` method:
 
 ```php
-$translator = $this->get('eko.google_translate.translator');
-$value = $translator->translate('Hi, this is my text to detect!', 'fr', 'en');
-// This will return 'Salut, ceci est mon texte à détecter!'
+// Use Autowiring
+public function myFunction(Translator $translator)
+{
+    $value = $translator->translate('Hi, this is my text to detect!', 'fr', 'en');
+    // This will return 'Salut, ceci est mon texte à détecter!'
 ```
 
 ### Translate a string from unknown language (use detector)
@@ -86,7 +84,6 @@ $value = $translator->translate('Hi, this is my text to detect!', 'fr', 'en');
 Retrieve the translator service and call the `translate()` method without the source (third) parameter:
 
 ```php
-$translator = $this->get('eko.google_translate.translator');
 $value = $translator->translate('Hi, this is my text to detect!', 'fr');
 // This will return 'Salut, ceci est mon texte à détecter!'
 ```
@@ -96,7 +93,6 @@ $value = $translator->translate('Hi, this is my text to detect!', 'fr');
 Retrieve the translator service and call the `translate()` method with an array of your strings:
 
 ```php
-$translator = $this->get('eko.google_translate.translator');
 $value = $translator->translate(array('Hi', 'This is my second text to detect!'), 'fr', 'en');
 // This will return the following array:
 // array(
@@ -110,7 +106,6 @@ Note that you can also use an "economic mode" to translate multiple strings in a
 Your translations will be concatenated in one single Google request. To use it, simply add `true` to the last argument:
 
 ```php
-$translator = $this->get('eko.google_translate.translator');
 $value = $translator->translate(array('Hi', 'This is my second text to detect!'), 'fr', 'en', true);
 // This will return the following array:
 // array(
@@ -124,13 +119,16 @@ $value = $translator->translate(array('Hi', 'This is my second text to detect!')
 Retrieve the languages service and call the `get()` method without any argument:
 
 ```php
-$languages = $this->get('eko.google_translate.languages')->get();
-// This will return:
-// array(
-//     array('language' => 'en'),
-//     array('language' => 'fr'),
-//     ...
-// )
+// Use Autowiring
+public function myFunction(Language $language)
+{
+    $language->get();
+    // This will return:
+    // array(
+    //     array('language' => 'en'),
+    //     array('language' => 'fr'),
+    //     ...
+    // )
 ```
 
 ### Obtain all languages codes available with their names translated
@@ -138,7 +136,7 @@ $languages = $this->get('eko.google_translate.languages')->get();
 Retrieve the languages service and call the `get()` method with a target language argument:
 
 ```php
-$languages = $this->get('eko.google_translate.languages')->get('fr');
+$language->get('fr');
 // This will return:
 // array(
 //     array('language' => 'en', 'name' => 'Anglais'),

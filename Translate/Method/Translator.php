@@ -1,26 +1,16 @@
 <?php
-/*
- * This file is part of the Eko\GoogleTranslateBundle Symfony bundle.
- *
- * (c) Vincent Composieux <vincent.composieux@gmail.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
 
-namespace Eko\GoogleTranslateBundle\Translate\Method;
+namespace Pasttaga\GoogleTranslateBundle\Translate\Method;
 
-use Eko\GoogleTranslateBundle\Translate\Method;
-use Eko\GoogleTranslateBundle\Translate\MethodInterface;
 use GuzzleHttp\ClientInterface;
+use Pasttaga\GoogleTranslateBundle\Translate\Method;
+use Pasttaga\GoogleTranslateBundle\Translate\MethodInterface;
 use Symfony\Component\Stopwatch\Stopwatch;
 
 /**
  * Class Translator.
  *
  * This is the class to translate text from a source language to a target one
- *
- * @author Vincent Composieux <vincent.composieux@gmail.com>
  */
 class Translator extends Method implements MethodInterface
 {
@@ -59,7 +49,7 @@ class Translator extends Method implements MethodInterface
     {
         $this->detector = $detector;
 
-        return parent::__construct($apiKey, $client, $stopwatch);
+        parent::__construct($apiKey, $client, $stopwatch);
     }
 
     /**
@@ -123,37 +113,36 @@ class Translator extends Method implements MethodInterface
         }
 
         // Split up the query if it is too long. See MAXIMUM_TEXT_SIZE description for more info.
-        {
-            $queryArray = [];
-            $remainingQuery = $query;
-            while (strlen($remainingQuery) >= self::MAXIMUM_TEXT_SIZE) {
-                // Get closest breaking character, but not farther than MAXIMUM_TEXT_SIZE characters away.
-                $i = 0;
-                $find = ["\n", '.', ' '];
 
-                while (false === ($pos = strrpos($remainingQuery, $find[$i], -(strlen($remainingQuery) - self::MAXIMUM_TEXT_SIZE)))) {
-                    $i++;
-                    if ($i >= count($find)) {
-                        break;
-                    }
-                }
-                if (false === $pos || 0 === $pos) {
+        $queryArray = [];
+        $remainingQuery = $query;
+        while (strlen($remainingQuery) >= self::MAXIMUM_TEXT_SIZE) {
+            // Get closest breaking character, but not farther than MAXIMUM_TEXT_SIZE characters away.
+            $i = 0;
+            $find = ["\n", '.', ' '];
+
+            while (false === ($pos = strrpos($remainingQuery, $find[$i], -(strlen($remainingQuery) - self::MAXIMUM_TEXT_SIZE)))) {
+                ++$i;
+                if ($i >= count($find)) {
                     break;
                 }
-
-                // Split.
-                $queryArray[] = substr($remainingQuery, 0, $pos);
-                $remainingQuery = substr($remainingQuery, $pos);
             }
-            $queryArray[] = $remainingQuery;
+            if (false === $pos || 0 === $pos) {
+                break;
+            }
+
+            // Split.
+            $queryArray[] = substr($remainingQuery, 0, $pos);
+            $remainingQuery = substr($remainingQuery, $pos);
         }
+        $queryArray[] = $remainingQuery;
 
         // Translate piece by piece.
         $result = '';
         foreach ($queryArray as $subQuery) {
             $options = [
-                'key'    => $this->apiKey,
-                'q'      => $subQuery,
+                'key' => $this->apiKey,
+                'q' => $subQuery,
                 'source' => $source,
                 'target' => $target,
                 'format' => ($plainText ? 'text' : 'html'),
@@ -185,7 +174,7 @@ class Translator extends Method implements MethodInterface
             $client->getConfig('target')
         );
 
-        $response = $client->get($this->url, ['query' => $options]);
+        $response = $client->request('GET', $this->url, ['query' => $options]);
         $json = json_decode($response->getBody()->getContents(), true);
 
         if (isset($json['data']['translations'])) {
@@ -194,7 +183,7 @@ class Translator extends Method implements MethodInterface
             $result = $current['translatedText'];
         }
 
-        $this->stopProfiling($event, $this->getName(), $result);
+        $this->stopProfiling($event);
 
         return $result;
     }

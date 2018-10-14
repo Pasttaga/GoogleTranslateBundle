@@ -1,19 +1,9 @@
 <?php
-/*
- * This file is part of the Eko\GoogleTranslateBundle Symfony bundle.
- *
- * (c) Vincent Composieux <vincent.composieux@gmail.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
 
-namespace Eko\GoogleTranslateBundle\Translate;
+namespace Pasttaga\GoogleTranslateBundle\Translate;
 
 /**
  * Interface MethodInterface.
- *
- * @author Vincent Composieux <vincent.composieux@gmail.com>
  */
 interface MethodInterface
 {

@@ -1,0 +1,12 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: false
+
+  pasttaga.google_translate.data_collector.translate:
+    class: Pasttaga\GoogleTranslateBundle\DataCollector\TranslateDataCollector
+    arguments:
+      - '@pasttaga.google_translate.method_manager'
+    tags:
+    - {name: 'data_collector', template: PasttagaGoogleTranslateBundle:Collector:translate, id: 'pasttaga.google_translate.data_collector.translate' }

@@ -1,13 +1,11 @@
 <?php
 
-namespace Eko\GoogleTranslateBundle\Tests\Method;
+namespace Pasttaga\GoogleTranslateBundle\Tests\Method;
 
-use Eko\GoogleTranslateBundle\Translate\Method\Detector;
+use Pasttaga\GoogleTranslateBundle\Translate\Method\Detector;
 
 /**
  * Detector class test.
- *
- * @author Vincent Composieux <vincent.composieux@gmail.com>
  */
 class DetectorTest extends \PHPUnit_Framework_TestCase
 {
@@ -27,7 +25,7 @@ class DetectorTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->detector = $this->getMock(
-            'Eko\GoogleTranslateBundle\Translate\Method\Detector',
+            'Pasttaga\GoogleTranslateBundle\Translate\Method\Detector',
             null,
             ['fakeapikey', $this->getClientMock()]
         );
@@ -59,7 +57,7 @@ class DetectorTest extends \PHPUnit_Framework_TestCase
             ['data' => ['detections' => [[['language' => Detector::UNDEFINED_LANGUAGE]]]]]
         ));
 
-        $this->setExpectedException('Eko\GoogleTranslateBundle\Exception\UnableToDetectException');
+        $this->setExpectedException('Pasttaga\GoogleTranslateBundle\Exception\UnableToDetectException');
 
         $this->detector->detect('undefined');
     }

@@ -1,0 +1,27 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: false
+    bind:
+      $apiKey: '%pasttaga_google_translate.api_key%'
+
+  GuzzleHttp\Client: ~
+
+  GuzzleHttp\ClientInterface: '@GuzzleHttp\Client'
+
+  Pasttaga\GoogleTranslateBundle\:
+    resource: '*'
+
+  Pasttaga\GoogleTranslateBundle\Translate\Method\Translator:
+    tags: {name: 'pasttaga.method'}
+
+  Pasttaga\GoogleTranslateBundle\Translate\Method\Detector:
+    tags: {name: 'pasttaga.method'}
+
+  Pasttaga\GoogleTranslateBundle\Translate\Method\Languages:
+    tags: {name: 'pasttaga.method'}
+
+  pasttaga.google_translate.method_manager :
+    class: Pasttaga\GoogleTranslateBundle\Translate\MethodManager
+    arguments: [!tagged pasttaga.method]

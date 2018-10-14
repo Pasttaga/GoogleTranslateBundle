@@ -1,16 +1,8 @@
 <?php
-/*
- * This file is part of the Eko\GoogleTranslateBundle Symfony bundle.
- *
- * (c) Vincent Composieux <vincent.composieux@gmail.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
 
-namespace Eko\GoogleTranslateBundle\DataCollector;
+namespace Pasttaga\GoogleTranslateBundle\DataCollector;
 
-use Eko\GoogleTranslateBundle\Translate\MethodManager;
+use Pasttaga\GoogleTranslateBundle\Translate\MethodManager;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\DataCollector\DataCollector;
@@ -20,8 +12,6 @@ use Symfony\Component\HttpKernel\DataCollector\DataCollectorInterface;
  * Class TranslateDataCollector.
  *
  * This collects all methods calls that are done in your application
- *
- * @author Vincent Composieux <vincent.composieux@gmail.com>
  */
 class TranslateDataCollector extends DataCollector implements DataCollectorInterface
 {
@@ -65,6 +55,11 @@ class TranslateDataCollector extends DataCollector implements DataCollectorInter
      */
     public function getName()
     {
-        return 'eko.google_translate.data_collector.translate';
+        return 'pasttaga.google_translate.data_collector.translate';
+    }
+
+    public function reset()
+    {
+        $this->data = [];
     }
 }

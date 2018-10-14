@@ -1,19 +1,11 @@
 <?php
-/*
- * This file is part of the Eko\GoogleTranslateBundle Symfony bundle.
- *
- * (c) Vincent Composieux <vincent.composieux@gmail.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
 
-namespace Eko\GoogleTranslateBundle\DependencyInjection;
+namespace Pasttaga\GoogleTranslateBundle\DependencyInjection;
 
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader;
-use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
+use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
@@ -22,7 +14,7 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
  *
  * To learn more see {@link http://symfony.com/doc/current/cookbook/bundles/extension.html}
  */
-class EkoGoogleTranslateExtension extends Extension
+class PasttagaGoogleTranslateExtension extends Extension
 {
     /**
      * {@inheritdoc}
@@ -32,10 +24,10 @@ class EkoGoogleTranslateExtension extends Extension
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 
-        $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
-        $loader->load('methods.xml');
+        $loader = new YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $loader->load('methods.yml');
 
-        $container->setParameter('eko_google_translate.api_key', $config['api_key']);
+        $container->setParameter('pasttaga_google_translate.api_key', $config['api_key']);
 
         $this->loadProfilerCollector($container, $loader);
     }
@@ -46,12 +38,12 @@ class EkoGoogleTranslateExtension extends Extension
      * @param ContainerBuilder $container Symfony dependency injection container
      * @param XmlFileLoader    $loader    XML file loader
      */
-    protected function loadProfilerCollector(ContainerBuilder $container, XmlFileLoader $loader)
+    protected function loadProfilerCollector(ContainerBuilder $container, YamlFileLoader $loader)
     {
         if ($container->getParameter('kernel.debug')) {
-            $loader->load('collector.xml');
+            $loader->load('collector.yml');
 
-            $services = $container->findTaggedServiceIds('eko.google_translate.method');
+            $services = $container->findTaggedServiceIds('pasttaga.google_translate.method');
             $identifiers = array_keys($services);
 
             foreach ($identifiers as $identifier) {

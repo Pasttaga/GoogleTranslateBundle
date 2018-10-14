@@ -1,14 +1,6 @@
 <?php
-/*
- * This file is part of the Eko\GoogleTranslateBundle Symfony bundle.
- *
- * (c) Vincent Composieux <vincent.composieux@gmail.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
 
-namespace Eko\GoogleTranslateBundle\Translate;
+namespace Pasttaga\GoogleTranslateBundle\Translate;
 
 use GuzzleHttp\ClientInterface;
 use Symfony\Component\Stopwatch\Stopwatch;
@@ -18,8 +10,6 @@ use Symfony\Component\Stopwatch\StopwatchEvent;
  * Class Method.
  *
  * This is the main Method class that is instancing Guzzle HTTP client
- *
- * @author Vincent Composieux <vincent.composieux@gmail.com>
  */
 class Method
 {
@@ -44,7 +34,7 @@ class Method
     protected $profiles = [];
 
     /**
-     * @var Stopwatch Symfony profiler Stopwatch service
+     * @var Stopwatch|null Symfony profiler Stopwatch service
      */
     protected $stopwatch;
 
@@ -62,8 +52,8 @@ class Method
      */
     public function __construct($apiKey, ClientInterface $client, Stopwatch $stopwatch = null)
     {
-        $this->apiKey    = $apiKey;
-        $this->client    = $client;
+        $this->apiKey = $apiKey;
+        $this->client = $client;
         $this->stopwatch = $stopwatch;
     }
 
@@ -101,13 +91,13 @@ class Method
     {
         if ($this->stopwatch instanceof Stopwatch) {
             $this->profiles[$this->counter] = [
-                'query'        => urldecode($query),
-                'source'       => $source,
-                'target'       => $target,
-                'duration'     => null,
+                'query' => urldecode($query),
+                'source' => $source,
+                'target' => $target,
+                'duration' => null,
                 'memory_start' => memory_get_usage(true),
-                'memory_end'   => null,
-                'memory_peak'  => null,
+                'memory_end' => null,
+                'memory_peak' => null,
             ];
 
             return $this->stopwatch->start($name);
@@ -119,20 +109,20 @@ class Method
      *
      * @param StopwatchEvent $event A stopwatchEvent instance
      */
-    protected function stopProfiling(StopwatchEvent $event = null)
+    protected function stopProfiling(StopwatchEvent $event)
     {
         if ($this->stopwatch instanceof Stopwatch) {
             $event->stop();
 
             $values = [
-                'duration'    => $event->getDuration(),
-                'memory_end'  => memory_get_usage(true),
+                'duration' => $event->getDuration(),
+                'memory_end' => memory_get_usage(true),
                 'memory_peak' => memory_get_peak_usage(true),
             ];
 
             $this->profiles[$this->counter] = array_merge($this->profiles[$this->counter], $values);
 
-            $this->counter++;
+            ++$this->counter;
         }
     }
 }
